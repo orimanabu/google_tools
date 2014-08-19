@@ -6,11 +6,10 @@ import certifi
 import httplib2
 import gdata.gauth
 import gdata.spreadsheets.client
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.file import Storage
-from oauth2client.tools import run
-from oauth2client.tools import run_flow
-import oauth2client.tools
+#from oauth2client.client import flow_from_clientsecrets
+#from oauth2client.file import Storage
+import oauth2client.client
+import oauth2client.file
 
 scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/'
 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
@@ -18,8 +17,8 @@ user_agent = 'orimanabu'
 secret_file = 'clientsecret.json'
 cred_file = 'cred.json'
 
-flow = flow_from_clientsecrets(secret_file, scope=scope, redirect_uri=redirect_uri)
-storage = Storage(cred_file)
+flow = oauth2client.client.flow_from_clientsecrets(secret_file, scope=scope, redirect_uri=redirect_uri)
+storage = oauth2client.file.Storage(cred_file)
 cred = storage.get()
 if cred is None or cred.invalid:
     #cred = run_flow(flow, storage, None)
