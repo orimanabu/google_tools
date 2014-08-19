@@ -6,8 +6,6 @@ import certifi
 import httplib2
 import gdata.gauth
 import gdata.spreadsheets.client
-#from oauth2client.client import flow_from_clientsecrets
-#from oauth2client.file import Storage
 import oauth2client.client
 import oauth2client.file
 
@@ -29,6 +27,7 @@ if cred is None or cred.invalid:
     code = raw_input('Please input the authentication code here:')
     h = httplib2.Http(ca_certs=certifi.where())
     cred = flow.step2_exchange(code, http=h)
+    cred = flow.step2_exchange(code)
     storage.put(cred)
 
 token = gdata.gauth.OAuth2Token(client_id=cred.client_id, client_secret=cred.client_secret, scope=scope, access_token=cred.access_token, refresh_token=cred.refresh_token, user_agent=user_agent)
