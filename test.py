@@ -8,6 +8,7 @@ import gdata.gauth
 import gdata.spreadsheets.client
 import oauth2client.client
 import oauth2client.file
+#import oauth2client.tools
 
 scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/'
 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
@@ -19,7 +20,7 @@ flow = oauth2client.client.flow_from_clientsecrets(secret_file, scope=scope, red
 storage = oauth2client.file.Storage(cred_file)
 cred = storage.get()
 if cred is None or cred.invalid:
-    #cred = run_flow(flow, storage, None)
+    #cred = oauth2client.tools.run(flow, storage)
     auth_uri = flow.step1_get_authorize_url()
     print 'Please go to this URL and get an authentication code:'
     print auth_uri
@@ -27,7 +28,6 @@ if cred is None or cred.invalid:
     code = raw_input('Please input the authentication code here:')
     h = httplib2.Http(ca_certs=certifi.where())
     cred = flow.step2_exchange(code, http=h)
-    cred = flow.step2_exchange(code)
     storage.put(cred)
 
 token = gdata.gauth.OAuth2Token(client_id=cred.client_id, client_secret=cred.client_secret, scope=scope, access_token=cred.access_token, refresh_token=cred.refresh_token, user_agent=user_agent)
